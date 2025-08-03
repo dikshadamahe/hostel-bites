@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order - Hostel Bites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="Pictures/logo.jpg">
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #ff7a00;
+            --primary-light: #ffa54d;
+            --dark: #252836;
+            --dark-light: #3a3e52;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            background-color: var(--light);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Navigation bar */
+        nav {
+            background-color: var(--dark);
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        nav .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        nav .logo {
+            max-width: 150px;
+            filter: drop-shadow(0 2px 4px rgba(255, 122, 0, 0.3));
+        }
+
+        nav ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        nav ul li {
+            margin: 15px 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--light);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        /* Main content container */
+        .container {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            padding: 40px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Order form */
+        .order-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .form-section h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 1.5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .payment-method {
+            position: relative;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .payment-method input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .payment-method label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .payment-method i {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .payment-method input:checked + label {
+            border-color: var(--primary);
+            background-color: rgba(255, 122, 0, 0.1);
+        }
+
+        /* Order summary */
+        .order-summary {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            position: sticky;
+            top: 40px;
+        }
+
+        .order-summary h2 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .order-summary h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 1.5px;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            display: flex;
+            align-items: center;
+        }
+
+        .item-name span {
+            background-color: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray);
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .place-order-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .place-order-btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 122, 0, 0.4);
+        }
+
+        /* Order tracking */
+        .order-tracking {
+            margin-top: 50px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+        .order-tracking h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .order-tracking h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 1.5px;
+        }
+
+        .tracking-info {
+            margin-bottom: 30px;
+        }
+
+        .order-id {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .order-id span {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .estimated-time {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .estimated-time span {
+            font-weight: 700;
+        }
+
+        .track-progress {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: #eee;
+            z-index: 1;
+        }
+
+        .progress-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.5s ease;
+        }
+
+        .track-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 120px;
+        }
+
+        .step-icon {
+            width: 35px;
+            height: 35px;
+            background-color: white;
+            border: 3px solid #eee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            transition: all 0.3s ease;
+        }
+
+        .step-icon i {
+            color: #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .step-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .track-step.active .step-icon {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+
+        .track-step.active .step-icon i {
+            color: white;
+        }
+
+        .track-step.active .step-title {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .track-step.completed .step-icon {
+            border-color: var(--success);
+            background-color: var(--success);
+        }
+
+        .track-step.completed .step-icon i {
+            color: white;
+        }
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .driver-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .driver-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .driver-details p {
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .driver-rating {
+            display: flex;
+            align-items: center;
+            color: var(--warning);
+        }
+
+        .driver-rating span {
+            color: var(--dark);
+            margin-left: 5px;
+        }
+
+        .driver-contact {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .driver-contact a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .driver-contact a:hover {
+            background-color: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .toast i {
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 40px 30px;
+            margin-top: auto;
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            transition: var(--transition);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-section p {
+            margin-bottom: 15px;
+            color: #b0b3b8;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #b0b3b8;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark-light);
+            color: var(--light);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--dark-light);
+            color: #b0b3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            nav {
+                transform: translateX(-100%);
+                box-shadow: none;
+            }
+
+            nav.active {
+                transform: translateX(0);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .container, footer {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .order-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+                margin-bottom: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .driver-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .driver-contact {
+                margin: 15px auto 0;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-methods {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu toggle for mobile -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation bar -->
+    <nav id="sideNav">
+        <div class="logo-container">
+            <img src="Pictures/logo.jpg" alt="Website Logo" class="logo">
+        </div>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="menu.html"><i class="fas fa-utensils"></i> Menu</a></li>
+            <!-- <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li> -->
+            <li><a href="contact.html"><i class="fas fa-phone"></i> Contact</a></li>
+            <li><a href="cart_index.html"><i class="fas fa-shopping-cart"></i> Cart <span id="nav-cart-count">(0)</span></a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Account</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Complete Your Order</h1>
+            <p>Provide your delivery details to complete your order</p>
+        </header>
+
+        <!-- Order form and summary -->
+        <div class="order-container">
+            <div class="form-container">
+                <form id="order-form">
+                    <!-- Delivery Address Section -->
+                    <div class="form-section">
+                        <h2>Delivery Address</h2>
+                        <div class="form-group">
+                            <label for="hostel">Hostel/Building</label>
+                            <select class="form-control" id="hostel" required>
+                                <option value="">Select your hostel/building</option>
+                                <option value="hostel-a">Hostel A</option>
+                                <option value="hostel-b">Hostel B</option>
+                                <option value="hostel-c">Hostel C</option>
+                                <option value="hostel-d">Hostel D</option>
+                                <option value="hostel-e">Hostel E</option>
+                                <option value="hostel-f">Hostel F</option>
+                                <option value="hostel-g">Hostel G</option>
+                                <option value="hostel-h">Hostel H</option>
+                                <option value="academic-block">Academic Block</option>
+                                <option value="admin-block">Admin Block</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="room">Room/Office Number</label>
+                                <input type="text" class="form-control" id="room" placeholder="e.g. 204" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="floor">Floor</label>
+                                <select class="form-control" id="floor" required>
+                                    <option value="">Select floor</option>
+                                    <option value="ground">Ground Floor</option>
+                                    <option value="1st">1st Floor</option>
+                                    <option value="2nd">2nd Floor</option>
+                                    <option value="3rd">3rd Floor</option>
+                                    <option value="4th">4th Floor</option>
+                                    <option value="5th">5th Floor</option>
+                                    <option value="6th">6th Floor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="landmark">Landmark (Optional)</label>
+                            <input type="text" class="form-control" id="landmark" placeholder="e.g. Near basketball court">
+                        </div>
+                    </div>
+
+                    <!-- Contact Information Section -->
+                    <div class="form-section">
+                        <h2>Contact Information</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Options Section -->
+                    <div class="form-section">
+                        <h2>Delivery Options</h2>
+                        <div class="form-group">
+                            <label for="delivery-time">Delivery Time</label>
+                            <select class="form-control" id="delivery-time" required>
+                                <option value="asap">As soon as possible</option>
+                                <option value="1-hour">Within 1 hour</option>
+                                <option value="2-hours">Within 2 hours</option>
+                                <option value="schedule">Schedule for later</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="scheduled-time-container" style="display: none;">
+                            <label for="scheduled-time">Schedule Time</label>
+                            <input type="datetime-local" class="form-control" id="scheduled-time">
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Delivery Instructions (Optional)</label>
+                            <textarea class="form-control" id="notes" rows="3" placeholder="Any special instructions for delivery?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Section -->
+                    <div class="form-section">
+                        <h2>Payment Method</h2>
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <input type="radio" id="cash" name="payment" value="cash" checked>
+                                <label for="cash">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    Cash on Delivery
+                                </label>
+                            </div>
+                            <div class="payment-method">
+                                <input type="radio" id="upi" name="payment" value="upi">
+                                <label for="upi">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    UPI
+                                </label>
+                            </div>
+                            <div class="payment-method">
+                                <input type="radio" id="card" name="payment" value="card">
+                                <label for="card">
+                                    <i class="far fa-credit-card"></i>
+                                    Card
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h2>Order Summary</h2>
+                <div class="order-items">
+                    <div class="order-item">
+                        <div class="item-name">
+                            <span>1</span>
+                            Classic Burger
+                        </div>
+                        <div class="item-price">Rs188.99</div>
+                    </div>
+                    <div class="order-item">
+                        <div class="item-name">
+                            <span>2</span>
+                            Margherita Pizza
+                        </div>
+                        <div class="item-price">Rs112.99</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span id="subtotal">Rs0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Delivery Fee</span>
+                    <span >Rs30.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Tax</span>
+                    <span id="">Rs15.10</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>Rs347.08</span>
+                </div>
+                <button class="place-order-btn" id="place-order-btn">Place Order</button>
+            </div>
+        </div>
+
+        <!-- Order Tracking Section -->
+        <div class="order-tracking" id="order-tracking" style="display: none;">
+            <h2>Track Your Order</h2>
+            <div class="tracking-info">
+                <p class="order-id">Order ID: <span>#HB298754</span></p>
+                <p class="estimated-time">Estimated Delivery Time: <span>30-40 minutes</span></p>
+            </div>
+            
+            <div class="track-progress">
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width: 50%;"></div>
+                </div>
+                <div class="track-step completed">
+                    <div class="step-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-title">Order Placed</div>
+                </div>
+                <div class="track-step completed">
+                    <div class="step-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="step-title">Order Confirmed</div>
+                </div>
+                <div class="track-step active">
+                    <div class="step-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="step-title">Preparing</div>
+                </div>
+                <div class="track-step">
+                    <div class="step-icon">
+                        <i class="fas fa-motorcycle"></i>
+                    </div>
+                    <div class="step-title">On the Way</div>
+                </div>
+                <div class="track-step">
+                    <div class="step-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="step-title">Delivered</div>
+                </div>
+            </div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

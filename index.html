@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Website</title>
+    <link rel="icon" href="Pictures/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #ff7a00;
+            --primary-light: #ffa54d;
+            --dark: #252836;
+            --dark-light: #3a3e52;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            background-color: var(--light);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Navigation bar */
+        nav {
+            background-color: var(--dark);
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        nav .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        nav .logo {
+            max-width: 150px;
+            filter: drop-shadow(0 2px 4px rgba(255, 122, 0, 0.3));
+        }
+
+        nav ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        nav ul li {
+            margin: 15px 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--light);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        /* Main content container */
+        .container {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            padding: 40px;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hero section */
+        .hero {
+            position: relative;
+            margin-bottom: 60px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            color: white;
+        }
+
+        .hero-overlay h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-overlay p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 20px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 122, 0, 0.3);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 122, 0, 0.4);
+        }
+
+        /* Section titles */
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 25px;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* Featured items */
+        .featured {
+            margin-bottom: 60px;
+        }
+
+        .featured-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .featured-item {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .featured-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .featured-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .featured-content {
+            padding: 20px;
+        }
+
+        .featured-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .featured-content p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        /* Gallery section */
+        .gallery-section {
+            margin-bottom: 60px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            height: 200px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 40px 30px;
+            margin-top: auto;
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            transition: var(--transition);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-section p {
+            margin-bottom: 15px;
+            color: #b0b3b8;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #b0b3b8;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark-light);
+            color: var(--light);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--dark-light);
+            color: #b0b3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            nav {
+                transform: translateX(-100%);
+                box-shadow: none;
+            }
+
+            nav.active {
+                transform: translateX(0);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .container, footer {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .featured-items {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+
+            .hero-overlay h2 {
+                font-size: 2rem;
+            }
+
+            .hero-overlay p {
+                font-size: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .hero-overlay {
+                padding: 20px;
+            }
+
+            .hero-overlay h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .toast i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu toggle for mobile -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation bar -->
+    <nav id="sideNav">
+        <div class="logo-container">
+            <img src="Pictures/logo.jpg" alt="Website Logo" class="logo">
+        </div>
+        <ul>
+            <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="menu.html"><i class="fas fa-utensils"></i> Menu</a></li>
+            <!-- <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li> -->
+            <li><a href="contact.html"><i class="fas fa-phone"></i> Contact</a></li>
+            <li><a href="cart_index.html"><i class="fas fa-shopping-cart"></i> Cart <span id="nav-cart-count">(0)</span></a></li>            <li><a href="#"><i class="fas fa-user"></i> Account</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Hostel Bites</h1>
+            <p>Delicious food delivered straight to your hostel room</p>
+        </header>
+
+        <!-- Hero section -->
+        <section class="hero">
+            <img src="Pictures/delicious.png" alt="Delicious food" class="hero-image">
+            <div class="hero-overlay">
+                <h2>Satisfy Your Cravings</h2>
+                <p>Enjoy a wide variety of delicious meals delivered right to your door. Fast delivery, hot food, and amazing taste guaranteed!</p>
+                <a href="#" class="btn">Order Now</a>
+            </div>
+        </section>
+
+        <!-- Featured items section -->
+        <section class="featured">
+            <h2 class="section-title">Popular Items</h2>
+            <div class="featured-items">
+                <div class="featured-item">
+                    <img src="Pictures/BBQ Pulled Veg Burger.jpg" alt="Food item 1">
+                    <div class="featured-content">
+                        <h3>Classic Burger</h3>
+                        <p>Juicy beef patty with fresh vegetables and our special sauce</p>
+                        <div class="price">
+                            <span>188.99</span>
+                            <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img src="Pictures/Margherita Pizza.jpg" alt="Food item 2">
+                    <div class="featured-content">
+                        <h3>Margherita Pizza</h3>
+                        <p>Classic pizza with tomato sauce, mozzarella, and fresh basil</p>
+                        <div class="price">
+                            <span>Rs112.99</span>
+                            <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img src="Pictures/Chicken Wings.jpeg" alt="Food item 3">
+                    <div class="featured-content">
+                        <h3>Chicken Wings</h3>
+                        <p>Crispy wings tossed in your choice of sauce with a side of fries</p>
+                        <div class="price">
+                            <span>Rs119.99</span>
+                            <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img src="Pictures/veggie bowl.jpeg" alt="Food item 4">
+                    <div class="featured-content">
+                        <h3>Veggie Bowl</h3>
+                        <p>Fresh mixed vegetables with quinoa and our signature dressing</p>
+                        <div class="price">
+                            <span>Rs117.99</span>
+                            <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery section -->
+        <section class="gallery-section">
+            <h2 class="section-title">Our Food Gallery</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="Pictures/Hakka Noodles.jpg" alt="Food gallery 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="Pictures/Fried Rice.jpg" alt="Food gallery 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="Pictures/Butter Chicken.jpg" alt="Food gallery 3">
+                </div>
+                <div class="gallery-item">
+                    <img src="Pictures/Idli Sambhar.jpg" alt="Food gallery 4">
+                </div>
+                <div class="gallery-item">
+                    <img src="Pictures/Oreo Shake.jpg" alt="Food gallery 5">
+                </div>
+                <div class="gallery-item">
+                    <img src="Pictures/Samosa.jpg" alt="Food gallery 6">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Hostel Bites is dedicated to bringing you the most delicious and affordable meals right to your hostel room. We understand student life and strive to make your dining experience exceptional.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="footer-section footer-links">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <!-- <a href="#">About Us</a> -->
+                <a href="contact.html">Contact</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-section footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> VIT Bhopal, Astha</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                <p><i class="fas fa-envelope"></i> info@hostelBites.com</p>
+                <p><i class="fas fa-clock"></i> Mon-Sun: 10:00 AM - 11:00 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Hostel Bites. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Item added to cart!</span>
+</div>
+</body>
+</html>

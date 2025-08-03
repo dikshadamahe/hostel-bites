@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Bites - Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Global styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #ff7a00;
+            --primary-light: #ffa54d;
+            --dark: #252836;
+            --dark-light: #3a3e52;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            background-color: var(--light);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Navigation bar */
+        nav {
+            background-color: var(--dark);
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        nav .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        nav .logo {
+            max-width: 150px;
+            filter: drop-shadow(0 2px 4px rgba(255, 122, 0, 0.3));
+        }
+
+        nav ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        nav ul li {
+            margin: 15px 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--light);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        nav ul li a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        /* Main content container */
+        .container {
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            padding: 40px;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        header h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Category filters */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .category-filter {
+            padding: 8px 20px;
+            background-color: white;
+            border: 2px solid var(--primary);
+            border-radius: 30px;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-filter:hover, .category-filter.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Menu items grid */
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-content {
+            padding: 20px;
+        }
+
+        .menu-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .menu-content .category {
+            display: inline-block;
+            background-color: #f8f9fa;
+            color: var(--gray);
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        .menu-content p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .menu-content .menu-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary-light);
+            transform: scale(1.1);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 40px 30px;
+            margin-top: auto;
+            margin-left: 220px;
+            width: calc(100% - 220px);
+            transition: var(--transition);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-section p {
+            margin-bottom: 15px;
+            color: #b0b3b8;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #b0b3b8;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark-light);
+            color: var(--light);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--dark-light);
+            color: #b0b3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 992px) {
+            nav {
+                transform: translateX(-100%);
+                box-shadow: none;
+            }
+
+            nav.active {
+                transform: translateX(0);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .container, footer {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-items {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .category-filters {
+                gap: 10px;
+            }
+
+            .category-filter {
+                padding: 6px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu toggle for mobile -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navigation bar -->
+    <nav id="sideNav">
+        <div class="logo-container">
+            <img src="Pictures/logo.jpg" alt="Website Logo" class="logo">
+        </div>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="menu.html" class="active"><i class="fas fa-utensils"></i> Menu</a></li>
+            <li><a href="contact.html"><i class="fas fa-phone"></i> Contact</a></li>
+            <li><a href="cart_index.html"><i class="fas fa-shopping-cart"></i> Cart <span id="nav-cart-count">(0)</span></a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Account</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Our Menu</h1>
+            <p>Delicious dishes crafted with love, delivered to your hostel door</p>
+        </header>
+
+        <!-- Category filters -->
+        <div class="category-filters">
+            <button class="category-filter active">All</button>
+            <button class="category-filter">Burgers</button>
+            <button class="category-filter">Pizza</button>
+            <button class="category-filter">Chinese</button>
+            <button class="category-filter">Indian</button>
+            <button class="category-filter">Desserts</button>
+            <button class="category-filter">Beverages</button>
+        </div>
+
+        <!-- Menu items -->
+<div class="menu-items">
+    <!-- Original Items 1-20 -->
+    <!-- Item 1 -->
+    <div class="menu-item">
+        <img src="Pictures/doble cheese burger veg.jpeg" alt="Double Cheese Burger">
+        <div class="menu-content">
+            <span class="category">Burgers</span>
+            <h3>Double Cheese Burger</h3>
+            <p>Double cheese patty with extra cheese, lettuce, tomato, and our secret sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs199.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="menu-item">
+        <img src="Pictures/Chicken Tikka Pizza.jpg" alt="Chicken Tikka Pizza">
+        <div class="menu-content">
+            <span class="category">Pizza</span>
+            <h3>Chicken Tikka Pizza</h3>
+            <p>Spicy chicken tikka chunks on a cheesy base with bell peppers and onions</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs249.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="menu-item">
+        <img src="Pictures/Butter Paneer Masala.jpg" alt="Paneer Butter Masala">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Paneer Butter Masala</h3>
+            <p>Soft paneer cubes in a rich, creamy tomato gravy with butter and spices</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs189.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="menu-item">
+        <img src="Pictures/Schezwan Noodles.jpg" alt="Schezwan Noodles">
+        <div class="menu-content">
+            <span class="category">Chinese</span>
+            <h3>Schezwan Noodles</h3>
+            <p>Stir-fried noodles with vegetables in a spicy schezwan sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs149.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="menu-item">
+        <img src="Pictures/Chocolate Brownie.jpg" alt="Chocolate Brownie">
+        <div class="menu-content">
+            <span class="category">Desserts</span>
+            <span class="category">Mayuri</span>
+            <h3>Chocolate Brownie</h3>
+            <p>Warm chocolate brownie served with vanilla ice cream and chocolate sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs129.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 6 -->
+    <div class="menu-item">
+        <img src="Pictures/Mango Shake.jpg" alt="Mango Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <span class="category">UnderBelly</span>
+            <h3>Mango Shake</h3>
+            <p>Fresh mango blended with milk, sugar, and ice cream</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs89.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 7 -->
+    <div class="menu-item">
+        <img src="Pictures/Chicken Biryani.jpg" alt="Veg Biryani">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <span class="category">AB</span>
+            <h3>Veg Biryani</h3>
+            <p>Aromatic basmati rice cooked with mixed vegetables and special spices</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs159.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 8 -->
+    <div class="menu-item">
+        <img src="Pictures/Chicken Manchurian.jpg" alt="Chicken Manchurian">
+        <div class="menu-content">
+            <span class="category">Chinese</span>
+            <span class="category">Mayuri</span>
+            <h3>Chicken Manchurian</h3>
+            <p>Crispy chicken balls tossed in a tangy manchurian sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs179.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 9 -->
+    <div class="menu-item">
+        <img src="Pictures/Veg Grilled Sandwich.jpg" alt="Veg Grilled Sandwich">
+        <div class="menu-content">
+            <span class="category">Burgers</span>
+            <span class="category">UnderBelly</span>
+            <h3>Veg Grilled Sandwich</h3>
+            <p>Grilled sandwich with cheese and mixed vegetables with mint chutney</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs119.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 10 -->
+    <div class="menu-item">
+        <img src="Pictures/Pepperoni Pizza.jpg" alt="Pepperoni Pizza">
+        <div class="menu-content">
+            <span class="category">Pizza</span>
+            <span class="category">UnderBelly</span>
+            <h3>Pepperoni Pizza</h3>
+            <p>Classic pizza topped with spicy pepperoni slices and mozzarella cheese</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs229.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 11 -->
+    <div class="menu-item">
+        <img src="Pictures/Butter Chicken.jpg" alt="Butter Chicken">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <span class="category">Mayuri</span>
+            <h3>Butter Chicken</h3>
+            <p>Tender chicken pieces in a rich, creamy tomato gravy</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs209.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 12 -->
+    <div class="menu-item">
+        <img src="Pictures/Hakka Noodles.jpg" alt="Hakka Noodles">
+        <div class="menu-content">
+            <span class="category">Chinese</span>
+            <h3>Hakka Noodles</h3>
+            <p>Stir-fried noodles with vegetables and soy sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs139.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 13 -->
+    <div class="menu-item">
+        <img src="Pictures/Gulab Jamun.jpg" alt="Gulab Jamun">
+        <div class="menu-content">
+            <span class="category">Desserts</span>
+            <h3>Gulab Jamun</h3>
+            <p>Soft milk-solid dumplings soaked in rose-flavored sugar syrup</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs99.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 14 -->
+    <div class="menu-item">
+        <img src="Pictures/Cold Coffee.jpg" alt="Cold Coffee">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Cold Coffee</h3>
+            <p>Chilled coffee blended with ice cream and chocolate syrup</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs79.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 15 -->
+    <div class="menu-item">
+        <img src="Pictures/Vegan Burger.jpg" alt="Vegan Burger">
+        <div class="menu-content">
+            <span class="category">Burgers</span>
+            <h3>Vegan Burger</h3>
+            <p>Plant-based patty with fresh vegetables and vegan mayo</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs169.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 16 -->
+    <div class="menu-item">
+        <img src="Pictures/BBQ Chicken Pizza.jpg" alt="BBQ Chicken Pizza">
+        <div class="menu-content">
+            <span class="category">Pizza</span>
+            <h3>BBQ Chicken Pizza</h3>
+            <p>Tangy BBQ sauce with grilled chicken, onions, and bell peppers</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs239.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 17 -->
+    <div class="menu-item">
+        <img src="Pictures/Dal Makhani.jpg" alt="Dal Makhani">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Dal Makhani</h3>
+            <p>Creamy black lentils slow-cooked with butter and spices</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs149.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 18 -->
+    <div class="menu-item">
+        <img src="Pictures/Fried Rice.jpg" alt="Fried Rice">
+        <div class="menu-content">
+            <span class="category">Chinese</span>
+            <h3>Veg Fried Rice</h3>
+            <p>Stir-fried rice with mixed vegetables and soy sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs129.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 19 -->
+    <div class="menu-item">
+        <img src="Pictures/Ice Cream Sundae.jpg" alt="Ice Cream Sundae">
+        <div class="menu-content">
+            <span class="category">Desserts</span>
+            <h3>Ice Cream Sundae</h3>
+            <p>Vanilla, chocolate, and strawberry ice cream with nuts and chocolate sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs119.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 20 -->
+    <div class="menu-item">
+        <img src="Pictures/Fresh Lime Soda.jpg" alt="Fresh Lime Soda">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Fresh Lime Soda</h3>
+            <p>Refreshing lime soda with mint leaves - sweet or salted</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs59.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Indian Items -->
+    <!-- Item 21 -->
+    <div class="menu-item">
+        <img src="Pictures/Chole Bhature.jpg" alt="Chole Bhature">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Chole Bhature</h3>
+            <p>Spicy chickpea curry served with deep-fried bread</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs149.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 22 -->
+    <div class="menu-item">
+        <img src="Pictures/Masala Dosa.jpg" alt="Masala Dosa">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Masala Dosa</h3>
+            <p>Crispy rice crepe filled with spiced potato filling, served with sambar and chutney</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs129.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 23 -->
+    <div class="menu-item">
+        <img src="Pictures/Pav Bhaji.jpg" alt="Pav Bhaji">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Pav Bhaji</h3>
+            <p>Spicy mashed vegetable curry served with buttered bread rolls</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs139.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 24 -->
+    <div class="menu-item">
+        <img src="Pictures/Aloo Paratha.jpg" alt="Aloo Paratha">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Aloo Paratha</h3>
+            <p>Whole wheat flatbread stuffed with spiced potato filling, served with curd and pickle</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs99.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 25 -->
+    <div class="menu-item">
+        <img src="Pictures/Malai Kofta.jpg" alt="Malai Kofta">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Malai Kofta</h3>
+            <p>Soft paneer and potato dumplings in a rich, creamy gravy</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs179.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 26 -->
+    <div class="menu-item">
+        <img src="Pictures/Chicken Biryani.jpg" alt="Chicken Biryani">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Chicken Biryani</h3>
+            <p>Fragrant basmati rice cooked with tender chicken pieces and aromatic spices</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs199.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 27 -->
+    <div class="menu-item">
+        <img src="Pictures/Hyderabadi Biryani.jpg" alt="Hyderabadi Biryani">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Hyderabadi Biryani</h3>
+            <p>Traditional Hyderabadi style biryani with fragrant rice and marinated meat</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs219.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 28 -->
+    <div class="menu-item">
+        <img src="Pictures/Rajma Chawal.jpg" alt="Rajma Chawal">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Rajma Chawal</h3>
+            <p>Kidney bean curry served with steamed rice</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs139.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 29 -->
+    <div class="menu-item">
+        <img src="Pictures/Samosa.jpg" alt="Samosa">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Samosa (2 pcs)</h3>
+            <p>Crispy pastry filled with spiced potatoes and peas, served with chutney</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs69.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 30 -->
+    <div class="menu-item">
+        <img src="Pictures/Paneer Tikka.jpg" alt="Paneer Tikka">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Paneer Tikka</h3>
+            <p>Marinated cottage cheese cubes grilled in a tandoor with vegetables</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs189.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional Shakes -->
+    <!-- Item 31 -->
+    <div class="menu-item">
+        <img src="Pictures/Strawberry Shake.jpg" alt="Strawberry Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Strawberry Shake</h3>
+            <p>Fresh strawberries blended with milk, vanilla ice cream, and sugar</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs89.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 32 -->
+    <div class="menu-item">
+        <img src="Pictures/Chocolate Shake.jpg" alt="Chocolate Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Chocolate Shake</h3>
+            <p>Rich chocolate ice cream blended with milk and chocolate sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs99.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 33 -->
+    <div class="menu-item">
+        <img src="Pictures/Oreo Shake.jpg" alt="Oreo Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Oreo Shake</h3>
+            <p>Crushed Oreo cookies blended with vanilla ice cream and milk</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs109.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 34 -->
+    <div class="menu-item">
+        <img src="Pictures/Butterscotch Shake.jpg" alt="Butterscotch Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Butterscotch Shake</h3>
+            <p>Butterscotch ice cream blended with milk and caramel sauce</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs99.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 35 -->
+    <div class="menu-item">
+        <img src="Pictures/Rose Falooda.jpg" alt="Rose Falooda">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Rose Falooda</h3>
+            <p>Traditional Indian cold dessert with rose syrup, vermicelli, basil seeds, and ice cream</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs129.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 36 -->
+    <div class="menu-item">
+        <img src="Pictures/Sitaphal Shake.jpg" alt="Sitaphal Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Sitaphal (Custard Apple) Shake</h3>
+            <p>Fresh custard apple pulp blended with milk and sugar</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs119.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 37 -->
+    <div class="menu-item">
+        <img src="Pictures/Banana Shake.jpg" alt="Banana Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Banana Shake</h3>
+            <p>Fresh bananas blended with milk, honey, and a hint of cinnamon</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs79.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 38 -->
+    <div class="menu-item">
+        <img src="Pictures/Dry Fruit Shake.jpg" alt="Dry Fruit Shake">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Dry Fruit Shake</h3>
+            <p>Rich shake with almonds, pistachios, cashews, and dates blended with milk</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs139.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- More Indian Special Items -->
+    <!-- Item 39 -->
+    <div class="menu-item">
+        <img src="Pictures/Rogan Josh.jpg" alt="Rogan Josh">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Rogan Josh</h3>
+            <p>Kashmiri style aromatic lamb curry with intense flavors</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs249.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 40 -->
+    <div class="menu-item">
+        <img src="Pictures/Idli Sambhar.jpg" alt="Idli Sambar">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Idli Sambar</h3>
+            <p>Steamed rice cakes served with lentil soup and coconut chutney</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs99.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 41 -->
+    <div class="menu-item">
+        <img src="Pictures/Medu Vada.jpg" alt="Medu Vada">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Medu Vada</h3>
+            <p>Crispy lentil donuts served with sambar and coconut chutney</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs89.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 42 -->
+    <div class="menu-item">
+        <img src="Pictures/Tandoori Chicken.jpg" alt="Tandoori Chicken">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Tandoori Chicken</h3>
+            <p>Chicken marinated in yogurt and spices, cooked in a clay oven</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs229.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 43 -->
+    <div class="menu-item">
+        <img src="Pictures/Chicken Tikka.jpg" alt="Chicken Tikka">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Chicken Tikka</h3>
+            <p>Boneless pieces of chicken marinated and grilled in a tandoor</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs209.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 44 -->
+    <div class="menu-item">
+        <img src="Pictures/Shahi Paneer.jpg" alt="Shahi Paneer">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Shahi Paneer</h3>
+            <p>Cottage cheese cubes in a rich, creamy sauce with nuts and spices</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs189.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Street Food -->
+    <!-- Item 45 -->
+    <div class="menu-item">
+        <img src="Pictures/pani puri.jpeg" alt="Pani Puri">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Pani Puri (6 pcs)</h3>
+            <p>Hollow crispy puris filled with spicy tangy water, potatoes, and chickpeas</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs79.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 46 -->
+    <div class="menu-item">
+        <img src="Pictures/Bhel Puri.jpg" alt="Bhel Puri">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Bhel Puri</h3>
+            <p>Puffed rice mixed with vegetables, tangy chutneys, and sev</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs89.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 47 -->
+    <div class="menu-item">
+        <img src="Pictures/Vada Pav.jpg" alt="Vada Pav">
+        <div class="menu-content">
+            <span class="category">Indian</span>
+            <h3>Vada Pav</h3>
+            <p>Spiced potato fritter in a bread bun with chutneys</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs69.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Item 48 -->
+    <div class="menu-item">
+        <img src="Pictures/Fresh Lime Soda.jpg" alt="Fresh Lime Soda">
+        <div class="menu-content">
+            <span class="category">Beverages</span>
+            <h3>Fresh Lime Soda</h3>
+            <p>Refreshing lime soda with mint leaves - sweet or salted</p>
+            <div class="menu-item-footer">
+                <span class="price">Rs59.99</span>
+                <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+            </div>
+        </div>
+    </div> 
+    
+        <!-- Item 49 -->
+        <div class="menu-item">
+            <img src="Pictures/Spicy Chicken Burger.jpg" alt="Spicy Chicken Burger">
+            <div class="menu-content">
+                <span class="category">Burgers</span>
+                <h3>Spicy Chicken Burger</h3>
+                <p>Crispy chicken patty with spicy mayo, lettuce, and jalapeños</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs179.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 50 -->
+        <div class="menu-item">
+            <img src="Pictures/Mushroom Swiss Burger.jpg" alt="Mushroom Swiss Burger">
+            <div class="menu-content">
+                <span class="category">Burgers</span>
+                <h3>Mushroom Swiss Burger</h3>
+                <p>Juicy chicken patty with sautéed mushrooms and Swiss cheese</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs199.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 51 -->
+        <div class="menu-item">
+            <img src="Pictures/Margherita Pizza.jpg" alt="Margherita Pizza">
+            <div class="menu-content">
+                <span class="category">Pizza</span>
+                <h3>Margherita Pizza</h3>
+                <p>Classic tomato sauce, mozzarella, and fresh basil</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs219.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 52 -->
+        <div class="menu-item">
+            <img src="Pictures/Veggie Supreme Pizza.jpg" alt="Veggie Supreme Pizza">
+            <div class="menu-content">
+                <span class="category">Pizza</span>
+                <h3>Veggie Supreme Pizza</h3>
+                <p>Bell peppers, onions, olives, mushrooms, and sweet corn</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs239.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 53 -->
+        <div class="menu-item">
+            <img src="Pictures/Malai Kofta.jpg" alt="Kadhai Paneer">
+            <div class="menu-content">
+                <span class="category">Indian</span>
+                <h3>Kadhai Paneer</h3>
+                <p>Paneer cooked in a spicy tomato-gravy with bell peppers</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs189.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 54 -->
+        <div class="menu-item">
+            <img src="Pictures/Fish Curry.jpg" alt="Fish Curry">
+            <div class="menu-content">
+                <span class="category">Indian</span>
+                <h3>Fish Curry</h3>
+                <p>Fish cooked in a tangy coconut-based gravy</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs229.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 55 -->
+        <div class="menu-item">
+            <img src="Pictures/Dahi Puri.jpg" alt="Dahi Puri">
+            <div class="menu-content">
+                <span class="category">Indian</span>
+                <h3>Dahi Puri (6 pcs)</h3>
+                <p>Crispy puris filled with yogurt, chutneys, and spices</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs89.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 56 -->
+        <div class="menu-item">
+            <img src="Pictures/BBQ Pulled Veg Burger.jpg" alt="BBQ Pulled Veg Sandwich">
+            <div class="menu-content">
+                <span class="category">Burgers</span>
+                <h3>BBQ Pulled Pork Sandwich</h3>
+                <p>Slow-cooked veggies in smoky BBQ sauce, coleslaw, and pickles</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs219.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 57 -->
+        <div class="menu-item">
+            <img src="Pictures/Tandoori Paneer Pizza .jpg" alt="Tandoori Paneer Pizza">
+            <div class="menu-content">
+                <span class="category">Pizza</span>
+                <h3>Tandoori Paneer Pizza</h3>
+                <p>Spicy paneer cubes, onions, and capsicum on a cheesy base</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs249.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Item 58 -->
+        <div class="menu-item">
+            <img src="Pictures/Rogan Josh.jpg" alt="Mutton Rogan Josh">
+            <div class="menu-content">
+                <span class="category">Indian</span>
+                <h3>Mutton Rogan Josh</h3>
+                <p>Rich Kashmiri-style mutton curry</p>
+                <div class="menu-item-footer">
+                    <span class="price">Rs269.99</span>
+                    <button class="add-to-cart"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+            
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Hostel Bites is dedicated to bringing you the most delicious and affordable meals right to your hostel room. We understand student life and strive to make your dining experience exceptional.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="footer-section footer-links">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="contact.html">Contact</a>
+                <a href="cart_index.html">Cart</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <div class="footer-section footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i>  VIT Bhopal, Astha</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                <p><i class="fas fa-envelope"></i> info@hostelBites.com</p>
+                <p><i class="fas fa-clock"></i> Mon-Sun: 10:00 AM - 11:00 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Hostel Bites. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Item added to cart!</span>
+    </div>
+    <script src="script.js"></script>
+
+</body>
+</html>
